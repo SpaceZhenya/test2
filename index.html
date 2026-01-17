@@ -1,364 +1,336 @@
-class OfflineStoryGenerator {
-  constructor() {
-    this.storyData = {
-      fantasy: {
-        protagonists: [
-          "a brave knight",
-          "a cunning wizard",
-          "an elven archer",
-          "a dwarven miner",
-          "a sorceress",
-          "a paladin"
-        ],
-        settings: [
-          "an ancient castle",
-          "a mystical forest",
-          "an enchanted kingdom",
-          "a hidden tower",
-          "a dragon's lair",
-          "a magical realm"
-        ],
-        conflicts:  [
-          "a dragon terrorizing the land",
-          "a curse spreading darkness",
-          "an ancient prophecy",
-          "a stolen artifact",
-          "a dark sorcerer's plot",
-          "an invasion of shadow creatures"
-        ],
-        allies: [
-          "a loyal companion",
-          "a wise elder",
-          "a mysterious stranger",
-          "a magical creature",
-          "a skilled bard",
-          "a noble prince"
-        ],
-        resolutions: [
-          "defeated the darkness and saved the kingdom",
-          "broke the curse with true love",
-          "fulfilled the prophecy",
-          "recovered the artifact and restored peace",
-          "banished the evil and brought hope",
-          "united the lands under one banner"
-        ]
-      },
-      scifi: {
-        protagonists:  [
-          "a space explorer",
-          "a rogue AI",
-          "a time traveler",
-          "a rebel commander",
-          "a cyborg pilot",
-          "a quantum scientist"
-        ],
-        settings:  [
-          "a distant planet",
-          "a space station",
-          "the far future",
-          "an alien world",
-          "a starship",
-          "a parallel dimension"
-        ],
-        conflicts:  [
-          "an alien invasion",
-          "a malfunction in the ship's systems",
-          "a temporal paradox",
-          "a corporate conspiracy",
-          "a rogue AI uprising",
-          "a black hole threatening existence"
-        ],
-        allies:  [
-          "a brilliant scientist",
-          "a loyal robot",
-          "a fellow survivor",
-          "an underground resistance",
-          "an alien ally",
-          "a hacker genius"
-        ],
-        resolutions: [
-          "saved humanity from extinction",
-          "repaired the systems and survived",
-          "fixed the timeline",
-          "exposed the conspiracy and freed the planet",
-          "shut down the rogue AI",
-          "escaped to a new world"
-        ]
-      },
-      mystery: {
-        protagonists: [
-          "a detective",
-          "a journalist",
-          "a private investigator",
-          "an amateur sleuth",
-          "a forensic expert",
-          "a retired police officer"
-        ],
-        settings: [
-          "a foggy city street",
-          "a haunted mansion",
-          "a small town",
-          "a bustling metropolis",
-          "an old library",
-          "a deserted warehouse"
-        ],
-        conflicts:  [
-          "a murder that shocked everyone",
-          "a missing person case",
-          "a hidden conspiracy",
-          "a series of strange events",
-          "a coded message",
-          "a disappearing suspect"
-        ],
-        allies:  [
-          "a loyal partner",
-          "a forensic expert",
-          "a helpful witness",
-          "an old friend",
-          "a tech specialist",
-          "a street informant"
-        ],
-        resolutions: [
-          "uncovered the truth and caught the culprit",
-          "found the missing person safe",
-          "exposed the conspiracy",
-          "solved the mystery to everyone's surprise",
-          "cracked the code and found the answer",
-          "brought justice to the innocent"
-        ]
-      },
-      adventure: {
-        protagonists: [
-          "an adventurer",
-          "a treasure hunter",
-          "an explorer",
-          "a wanderer",
-          "a mountaineer",
-          "a seasoned sailor"
-        ],
-        settings:  [
-          "a dense jungle",
-          "a vast desert",
-          "towering mountains",
-          "an uncharted island",
-          "a dangerous ocean",
-          "a hidden valley"
-        ],
-        conflicts:  [
-          "seeking a legendary treasure",
-          "escaping from danger",
-          "surviving harsh conditions",
-          "facing rival adventurers",
-          "battling wild creatures",
-          "crossing impossible terrain"
-        ],
-        allies: [
-          "a local guide",
-          "fellow adventurers",
-          "a quirky companion",
-          "an unexpected helper",
-          "a native tracker",
-          "a seasoned veteran"
-        ],
-        resolutions: [
-          "found the treasure and became rich",
-          "survived the ordeal and returned home",
-          "reached the destination safely",
-          "made a remarkable discovery",
-          "claimed the prize and won glory",
-          "lived to tell the tale"
-        ]
-      },
-      romance: {
-        protagonists: [
-          "a young artist",
-          "a musician",
-          "a writer",
-          "a dreamer",
-          "a painter",
-          "a poet"
-        ],
-        settings:  [
-          "a charming cafe",
-          "a sunset beach",
-          "a bustling city",
-          "a quiet countryside",
-          "a moonlit garden",
-          "a cozy bookstore"
-        ],
-        conflicts: [
-          "separated by circumstances",
-          "family disapproval",
-          "misunderstanding and doubt",
-          "competing feelings",
-          "distance and longing",
-          "a difficult choice"
-        ],
-        allies:  [
-          "a supportive friend",
-          "a caring family member",
-          "a confidant",
-          "fate itself",
-          "a wise mentor",
-          "a secret admirer"
-        ],
-        resolutions: [
-          "found their way back to each other",
-          "overcame all obstacles together",
-          "confessed their true feelings",
-          "lived happily ever after",
-          "started a new chapter together",
-          "discovered love was worth fighting for"
-        ]
-      }
-    };
-  }
+<! DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /**
-   * Get a random element from an array
-   * @param {Array} array - The array to pick from
-   * @returns {*} A random element
-   */
-  getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+        }
 
-  /**
-   * Generate a random story in the specified genre
-   * @param {string} genre - One of 'fantasy', 'scifi', 'mystery', 'adventure', 'romance'
-   * @param {string} length - 'short', 'medium', or 'long'
-   * @returns {string} A generated story
-   */
-  generateStory(genre = null, length = 'medium') {
-    // Select random genre if not specified
-    if (genre === null) {
-      genre = this.getRandomElement(Object.keys(this.storyData));
-    }
+        . container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
 
-    // Validate genre
-    if (!this.storyData[genre]) {
-      throw new Error(
-        `Unknown genre: ${genre}. Choose from ${Object.keys(this.storyData).join(', ')}`
-      );
-    }
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
-    const genreData = this.storyData[genre];
+        .game-board {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            background: #1a1a2e;
+            border: 3px solid #16c784;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
 
-    // Select random elements
-    const protagonist = this.getRandomElement(genreData.protagonists);
-    const setting = this.getRandomElement(genreData.settings);
-    const conflict = this.getRandomElement(genreData.conflicts);
-    const ally = this.getRandomElement(genreData.allies);
-    const resolution = this.getRandomElement(genreData.resolutions);
+        .center-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            left: 50%;
+            transform:  translateX(-50%);
+            background: repeating-linear-gradient(
+                to bottom,
+                #16c784 0px,
+                #16c784 20px,
+                transparent 20px,
+                transparent 40px
+            );
+        }
 
-    // Build and return the story
-    return this.buildStory(
-      protagonist,
-      setting,
-      conflict,
-      ally,
-      resolution,
-      genre,
-      length
-    );
-  }
+        .paddle {
+            position: absolute;
+            width: 12px;
+            height: 100px;
+            background: #16c784;
+            border-radius:  5px;
+            top: 150px;
+        }
 
-  /**
-   * Build a story from components
-   * @private
-   */
-  buildStory(protagonist, setting, conflict, ally, resolution, genre, length) {
-    const intro = `In ${setting}, there lived ${protagonist}.  This is the tale of ${protagonist}'s extraordinary journey.\n\n`;
+        .paddle-left {
+            left: 20px;
+        }
 
-    const middleParts = [
-      `${protagonist. charAt(0).toUpperCase() + protagonist.slice(1)} soon discovered that ${conflict}. `,
-      `The situation was dire.  ${protagonist.charAt(0).toUpperCase() + protagonist.slice(1)} knew that something had to be done.`,
-      `Help came in the form of ${ally}, who joined ${protagonist} in the quest. `,
-      `Together, they faced incredible challenges and hardships.`,
-      `Their journey was long and filled with danger, but their determination never wavered.`,
-      `Every step brought them closer to their goal, despite the overwhelming odds.`,
-      `Through courage and wisdom, ${protagonist} pressed forward.`
-    ];
+        . paddle-right {
+            right:  20px;
+        }
 
-    let middleText;
-    if (length === 'short') {
-      middleText = this.getRandomElement(middleParts. slice(0, 2));
-    } else if (length === 'long') {
-      middleText = middleParts.join(' ');
-    } else {
-      // medium
-      const shuffled = this.shuffle(middleParts).slice(0, 3);
-      middleText = shuffled.join(' ');
-    }
+        .ball {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            border-radius: 50%;
+            top:  195px;
+            left: 395px;
+            box-shadow: 0 0 10px #ffd700;
+        }
 
-    const conclusion = `\n\nIn the end, ${protagonist} ${resolution}. And so, the story of ${protagonist} became a legend, told for generations to come.`;
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding:  20px 40px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-    return intro + middleText + conclusion;
-  }
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
 
-  /**
-   * Fisher-Yates shuffle algorithm
-   * @private
-   */
-  shuffle(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
+        . score-value {
+            font-size: 48px;
+            color: #16c784;
+        }
 
-  /**
-   * Generate multiple stories
-   * @param {number} count - How many stories to generate
-   * @param {string} genre - Optional:  specific genre
-   * @returns {Array<string>} Array of generated stories
-   */
-  generateMultipleStories(count = 5, genre = null) {
-    const stories = [];
-    for (let i = 0; i < count; i++) {
-      stories.push(this.generateStory(genre, 'medium'));
-    }
-    return stories;
-  }
+        .instructions {
+            color: white;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius:  8px;
+            max-width: 600px;
+        }
 
-  /**
-   * Get available genres
-   * @returns {Array<string>} List of available genres
-   */
-  getAvailableGenres() {
-    return Object.keys(this.storyData);
-  }
-}
+        .instructions p {
+            margin:  5px 0;
+            font-size: 14px;
+        }
 
-// Example usage
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = OfflineStoryGenerator;
-}
+        .game-status {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏓 PING PONG GAME</h1>
+        <div class="game-board">
+            <div class="center-line"></div>
+            <div class="paddle paddle-left" id="paddleLeft"></div>
+            <div class="paddle paddle-right" id="paddleRight"></div>
+            <div class="ball" id="ball"></div>
+        </div>
+        <div class="scoreboard">
+            <div class="score-item">
+                <div>PLAYER</div>
+                <div class="score-value" id="playerScore">0</div>
+            </div>
+            <div class="score-item">
+                <div>COMPUTER</div>
+                <div class="score-value" id="computerScore">0</div>
+            </div>
+        </div>
+        <div class="game-status" id="gameStatus"></div>
+        <div class="instructions">
+            <p><strong>Controls:</strong></p>
+            <p>Use <strong>MOUSE</strong> or <strong>ARROW KEYS ↑↓</strong> to move your paddle</p>
+            <p>First to <strong>5 points</strong> wins!</p>
+        </div>
+    </div>
 
-// Browser/Node.js demo
-function runDemo() {
-  const generator = new OfflineStoryGenerator();
+    <script>
+        // Game variables
+        const gameBoard = document.querySelector('.game-board');
+        const ball = document.getElementById('ball');
+        const paddleLeft = document. getElementById('paddleLeft');
+        const paddleRight = document.getElementById('paddleRight');
+        const playerScoreDisplay = document.getElementById('playerScore');
+        const computerScoreDisplay = document.getElementById('computerScore');
+        const gameStatus = document.getElementById('gameStatus');
 
-  console.log('=== Offline Story Generator ===\n');
-  console.log('Available genres:', generator.getAvailableGenres().join(', '));
-  console.log('\n');
+        // Game state
+        let ballX = 395;
+        let ballY = 195;
+        let ballSpeedX = 4;
+        let ballSpeedY = 4;
+        const ballSize = 10;
 
-  // Generate a story for each genre
-  generator.getAvailableGenres().forEach(genre => {
-    console.log(`\n--- ${genre.toUpperCase()} STORY ---`);
-    const story = generator. generateStory(genre, 'medium');
-    console.log(story);
-  });
+        let paddleLeftY = 150;
+        let paddleRightY = 150;
+        const paddleHeight = 100;
+        const paddleWidth = 12;
+        const paddleSpeed = 6;
 
-  // Generate a long story in a random genre
-  console. log('\n\n--- BONUS LONG STORY ---');
-  const longStory = generator.generateStory(null, 'long');
-  console.log(longStory);
-}
+        let playerScore = 0;
+        let computerScore = 0;
+        const winScore = 5;
 
-// Run demo if this is being executed directly
-if (typeof require !== 'undefined' && require.main === module) {
-  runDemo();
-}
+        let gameActive = true;
+        let mouseY = 0;
+        let upPressed = false;
+        let downPressed = false;
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            const rect = gameBoard.getBoundingClientRect();
+            mouseY = e.clientY - rect.top;
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') upPressed = true;
+            if (e.key === 'ArrowDown') downPressed = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowUp') upPressed = false;
+            if (e. key === 'ArrowDown') downPressed = false;
+        });
+
+        // Update paddle position
+        function updatePaddleLeft() {
+            // Use mouse position
+            paddleLeftY = mouseY - paddleHeight / 2;
+
+            // Also respond to arrow keys
+            if (upPressed) paddleLeftY -= paddleSpeed;
+            if (downPressed) paddleLeftY += paddleSpeed;
+
+            // Boundary checking
+            if (paddleLeftY < 0) paddleLeftY = 0;
+            if (paddleLeftY + paddleHeight > 400) paddleLeftY = 400 - paddleHeight;
+
+            paddleLeft.style.top = paddleLeftY + 'px';
+        }
+
+        // Computer AI
+        function updatePaddleRight() {
+            const paddleCenterY = paddleRightY + paddleHeight / 2;
+            const ballCenterY = ballY + ballSize / 2;
+
+            // AI difficulty: aim for the ball center with some lag
+            if (ballSpeedX > 0) { // Only move when ball comes toward computer
+                if (paddleCenterY < ballCenterY - 35) {
+                    paddleRightY += paddleSpeed;
+                } else if (paddleCenterY > ballCenterY + 35) {
+                    paddleRightY -= paddleSpeed;
+                }
+            }
+
+            // Boundary checking
+            if (paddleRightY < 0) paddleRightY = 0;
+            if (paddleRightY + paddleHeight > 400) paddleRightY = 400 - paddleHeight;
+
+            paddleRight.style.top = paddleRightY + 'px';
+        }
+
+        // Update ball position
+        function updateBall() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // Wall collision (top and bottom)
+            if (ballY <= 0 || ballY + ballSize >= 400) {
+                ballSpeedY = -ballSpeedY;
+                if (ballY <= 0) ballY = 0;
+                if (ballY + ballSize >= 400) ballY = 400 - ballSize;
+            }
+
+            // Paddle collision (left)
+            if (
+                ballSpeedX < 0 &&
+                ballX <= paddleLeft.offsetLeft + paddleWidth &&
+                ballY + ballSize >= paddleLeftY &&
+                ballY <= paddleLeftY + paddleHeight
+            ) {
+                ballSpeedX = -ballSpeedX;
+                ballX = paddleLeft.offsetLeft + paddleWidth;
+                // Add some variation to ball speed
+                ballSpeedY += (Math.random() - 0.5) * 2;
+            }
+
+            // Paddle collision (right)
+            if (
+                ballSpeedX > 0 &&
+                ballX + ballSize >= paddleRight.offsetLeft &&
+                ballY + ballSize >= paddleRightY &&
+                ballY <= paddleRightY + paddleHeight
+            ) {
+                ballSpeedX = -ballSpeedX;
+                ballX = paddleRight. offsetLeft - ballSize;
+                // Add some variation to ball speed
+                ballSpeedY += (Math.random() - 0.5) * 2;
+            }
+
+            // Score points
+            if (ballX < 0) {
+                computerScore++;
+                resetBall();
+                if (computerScore >= winScore) {
+                    endGame('COMPUTER WINS!');
+                }
+            }
+
+            if (ballX + ballSize > 800) {
+                playerScore++;
+                resetBall();
+                if (playerScore >= winScore) {
+                    endGame('YOU WIN!');
+                }
+            }
+
+            // Update display
+            ball.style.left = ballX + 'px';
+            ball.style.top = ballY + 'px';
+            playerScoreDisplay.textContent = playerScore;
+            computerScoreDisplay.textContent = computerScore;
+        }
+
+        // Reset ball to center
+        function resetBall() {
+            ballX = 395;
+            ballY = 195;
+            ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 4;
+            ballSpeedY = (Math.random() - 0.5) * 4;
+        }
+
+        // End game
+        function endGame(message) {
+            gameActive = false;
+            gameStatus.textContent = message + ' Press F5 to reload the game. ';
+            gameStatus.style.color = '#ffd700';
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (gameActive) {
+                updatePaddleLeft();
+                updatePaddleRight();
+                updateBall();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game
+        gameLoop();
+    </script>
+</body>
+</html>
