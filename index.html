@@ -1,0 +1,149 @@
+import random
+import json
+from typing import List, Dict, Tuple
+from enum import Enum
+
+class StoryGenre(Enum):
+    FANTASY = "fantasy"
+    SCIFI = "sci-fi"
+    MYSTERY = "mystery"
+    ADVENTURE = "adventure"
+    ROMANCE = "romance"
+
+class OfflineStoryGenerator:
+    """A local story generator that doesn't require internet connection."""
+    
+    def __init__(self):
+        self.story_data = {
+            "fantasy": {
+                "protagonists": ["a brave knight", "a cunning wizard", "an elven archer", "a dwarven miner"],
+                "settings": ["an ancient castle", "a mystical forest", "an enchanted kingdom", "a hidden tower"],
+                "conflicts": ["a dragon terrorizing the land", "a curse spreading darkness", "an ancient prophecy", "a stolen artifact"],
+                "allies": ["a loyal companion", "a wise elder", "a mysterious stranger", "a magical creature"],
+                "resolutions": ["defeated the darkness and saved the kingdom", "broke the curse with true love", "fulfilled the prophecy", "recovered the artifact and restored peace"]
+            },
+            "sci-fi": {
+                "protagonists": ["a space explorer", "a rogue AI", "a time traveler", "a rebel commander"],
+                "settings": ["a distant planet", "a space station", "the far future", "an alien world"],
+                "conflicts":  ["an alien invasion", "a malfunction in the ship's systems", "a temporal paradox", "a corporate conspiracy"],
+                "allies": ["a brilliant scientist", "a loyal robot", "a fellow survivor", "an underground resistance"],
+                "resolutions": ["saved humanity from extinction", "repaired the systems and survived", "fixed the timeline", "exposed the conspiracy and freed the planet"]
+            },
+            "mystery": {
+                "protagonists":  ["a detective", "a journalist", "a private investigator", "an amateur sleuth"],
+                "settings":  ["a foggy city street", "a haunted mansion", "a small town", "a bustling metropolis"],
+                "conflicts": ["a murder that shocked everyone", "a missing person case", "a hidden conspiracy", "a series of strange events"],
+                "allies": ["a loyal partner", "a forensic expert", "a helpful witness", "an old friend"],
+                "resolutions":  ["uncovered the truth and caught the culprit", "found the missing person safe", "exposed the conspiracy", "solved the mystery to everyone's surprise"]
+            },
+            "adventure": {
+                "protagonists":  ["an adventurer", "a treasure hunter", "an explorer", "a wanderer"],
+                "settings": ["a dense jungle", "a vast desert", "towering mountains", "an uncharted island"],
+                "conflicts": ["seeking a legendary treasure", "escaping from danger", "surviving harsh conditions", "facing rival adventurers"],
+                "allies":  ["a local guide", "fellow adventurers", "a quirky companion", "an unexpected helper"],
+                "resolutions": ["found the treasure and became rich", "survived the ordeal and returned home", "reached the destination safely", "made a remarkable discovery"]
+            },
+            "romance": {
+                "protagonists": ["a young artist", "a musician", "a writer", "a dreamer"],
+                "settings": ["a charming cafe", "a sunset beach", "a bustling city", "a quiet countryside"],
+                "conflicts": ["separated by circumstances", "family disapproval", "misunderstanding and doubt", "competing feelings"],
+                "allies": ["a supportive friend", "a caring family member", "a confidant", "fate itself"],
+                "resolutions": ["found their way back to each other", "overcame all obstacles together", "confessed their true feelings", "lived happily ever after"]
+            }
+        }
+    
+    def generate_story(self, genre: str = None, length: str = "medium") -> str:
+        """
+        Generate a random story in the specified genre.
+        
+        Args:
+            genre: One of 'fantasy', 'sci-fi', 'mystery', 'adventure', 'romance'
+                   If None, a random genre is selected
+            length:  'short', 'medium', or 'long'
+        
+        Returns:
+            A generated story as a string
+        """
+        if genre is None:
+            genre = random. choice(list(self.story_data.keys()))
+        elif genre not in self.story_data:
+            raise ValueError(f"Unknown genre: {genre}. Choose from {list(self.story_data. keys())}")
+        
+        genre_data = self.story_data[genre]
+        
+        # Select random elements
+        protagonist = random.choice(genre_data["protagonists"])
+        setting = random.choice(genre_data["settings"])
+        conflict = random.choice(genre_data["conflicts"])
+        ally = random.choice(genre_data["allies"])
+        resolution = random.choice(genre_data["resolutions"])
+        
+        # Build the story
+        story = self._build_story(
+            protagonist, setting, conflict, ally, resolution, genre, length
+        )
+        
+        return story
+    
+    def _build_story(self, protagonist:  str, setting: str, conflict:  str, 
+                     ally: str, resolution: str, genre: str, length: str) -> str:
+        """Build a story from components."""
+        
+        intro = f"In {setting}, there lived {protagonist}. This is the tale of {protagonist}'s extraordinary journey.\n\n"
+        
+        middle_parts = [
+            f"{protagonist. capitalize()} soon discovered that {conflict}.",
+            f"The situation was dire.  {protagonist. capitalize()} knew that something had to be done.",
+            f"Help came in the form of {ally}, who joined {protagonist} in the quest.",
+            f"Together, they faced incredible challenges and hardships.",
+            f"Their journey was long and filled with danger, but their determination never wavered.",
+        ]
+        
+        conclusion = f"\nIn the end, {protagonist} {resolution}. And so, the story of {protagonist} became a legend, told for generations to come."
+        
+        # Adjust length
+        if length == "short": 
+            middle = random.choice(middle_parts[: 2])
+        elif length == "long":
+            middle = " ".join(middle_parts)
+        else:  # medium
+            middle = " ".join(random.sample(middle_parts, 3))
+        
+        return intro + middle + conclusion
+    
+    def generate_multiple_stories(self, count: int = 5, genre: str = None) -> List[str]:
+        """Generate multiple stories."""
+        stories = []
+        for _ in range(count):
+            story = self.generate_story(genre)
+            stories.append(story)
+        return stories
+    
+    def get_available_genres(self) -> List[str]:
+        """Return list of available genres."""
+        return list(self.story_data.keys())
+
+
+def main():
+    """Main function to demonstrate the story generator."""
+    generator = OfflineStoryGenerator()
+    
+    print("=== Offline Story Generator ===\n")
+    print("Available genres:", ", ".join(generator.get_available_genres()))
+    print()
+    
+    # Generate stories for each genre
+    for genre in generator. get_available_genres():
+        print(f"\n--- {genre.upper()} STORY ---")
+        story = generator.generate_story(genre=genre, length="medium")
+        print(story)
+        print()
+    
+    # Generate a long story in a random genre
+    print("\n--- BONUS LONG STORY ---")
+    long_story = generator.generate_story(length="long")
+    print(long_story)
+
+
+if __name__ == "__main__":
+    main()
