@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Ping Pong Game</title>
+    <title>3D Ping Pong Game - Immersive</title>
     <style>
         body {
             margin: 0;
@@ -11,7 +11,7 @@
             width: 100%;
             height: 100vh;
             background: #000;
-            overflow:  hidden;
+            overflow: hidden;
             font-family: Arial, sans-serif;
         }
 
@@ -30,64 +30,100 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 20px;
-            z-index: 10;
+            padding: 30px;
+            z-index:  10;
         }
 
         .scoreboard {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            color: #00ff00;
-            font-size: 32px;
-            font-weight: bold;
-            text-shadow: 0 0 10px #00ff00;
+            font-size: 48px;
+            font-weight:  bold;
         }
 
-        . score-item {
+        .score-item {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
-        .score-label {
-            font-size: 16px;
-            margin-bottom:  10px;
-            opacity: 0.8;
+        . score-label {
+            font-size: 20px;
+            opacity: 0.9;
+            letter-spacing: 2px;
         }
 
         .score-value {
-            font-size: 48px;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00;
+            font-size: 64px;
+            font-weight:  900;
+            text-shadow: 0 0 30px currentColor;
+        }
+
+        . player-score . score-label {
+            color: #ff0080;
+        }
+
+        .player-score .score-value {
+            color: #ff0080;
+        }
+
+        .computer-score .score-label {
+            color: #0080ff;
+        }
+
+        . computer-score .score-value {
+            color: #0080ff;
+        }
+
+        .center-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
         }
 
         .game-status {
             text-align: center;
             color: #ffff00;
-            font-size: 28px;
+            font-size: 42px;
             font-weight: bold;
-            text-shadow: 0 0 10px #ffff00;
-            min-height: 40px;
+            text-shadow: 0 0 20px #ffff00;
+            min-height: 50px;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         . instructions {
-            text-align:  center;
-            color: #00ccff;
-            font-size:  14px;
-            text-shadow: 0 0 10px #00ccff;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #00ccff;
+            text-align: center;
+            color: #00ff88;
+            font-size: 16px;
+            text-shadow: 0 0 10px #00ff88;
+            line-height: 1.8;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00ff88;
+            backdrop-filter: blur(10px);
         }
 
-        . center-info {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
+        .instructions p {
+            margin: 8px 0;
+        }
+
+        .speed-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: #00ff88;
+            font-size: 14px;
+            text-shadow: 0 0 10px #00ff88;
         }
     </style>
 </head>
@@ -96,147 +132,266 @@
 
     <div class="ui-overlay">
         <div class="scoreboard">
-            <div class="score-item">
-                <div class="score-label">PLAYER</div>
+            <div class="score-item player-score">
+                <div class="score-label">YOU</div>
                 <div class="score-value" id="playerScore">0</div>
             </div>
             <div class="center-info">
                 <div class="game-status" id="gameStatus"></div>
             </div>
-            <div class="score-item">
-                <div class="score-label">COMPUTER</div>
+            <div class="score-item computer-score">
+                <div class="score-label">AI</div>
                 <div class="score-value" id="computerScore">0</div>
             </div>
         </div>
 
         <div class="instructions">
-            <p><strong>🎮 3D PING PONG</strong></p>
-            <p>Use <strong>MOUSE</strong> or <strong>ARROW KEYS ↑↓</strong> to move your paddle</p>
-            <p>First to <strong>5 points</strong> wins!</p>
+            <p><strong>🎮 3D IMMERSIVE PING PONG 🎮</strong></p>
+            <p>🖱️ Move your MOUSE up/down or press ⬆️⬇️ ARROW KEYS</p>
+            <p>⚡ First to 5 points wins!</p>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        console.log("Script started");
+    <div class="speed-indicator" id="speedIndicator"></div>
 
-        // Wait for Three.js to load
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min. js"></script>
+    <script>
+        console.log("3D Ping Pong Game Loading...");
+
         function checkThreeJS() {
             if (typeof THREE === 'undefined') {
-                console.log("THREE not loaded yet, retrying...");
                 setTimeout(checkThreeJS, 100);
                 return;
             }
-
-            console.log("THREE loaded successfully");
             startGame();
         }
 
         checkThreeJS();
 
         function startGame() {
-            console.log("Starting game...");
+            console.log("🎮 Game Started!");
 
             // Scene
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1a2e);
+            scene.background = new THREE.Color(0x0a0a0a);
+            scene.fog = new THREE.Fog(0x0a0a0a, 300, 500);
 
-            // Camera
-            const camera = new THREE.PerspectiveCamera(
+            // Camera - First person view from player's paddle position
+            const camera = new THREE. PerspectiveCamera(
                 75,
                 window.innerWidth / window.innerHeight,
                 0.1,
                 1000
             );
-            camera. position.z = 50;
-            camera.position.y = 15;
+            camera.position.set(-35, 0, 0);
+            camera.lookAt(0, 0, 0);
 
             // Renderer
             const container = document.getElementById('gameContainer');
-            const renderer = new THREE. WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer. shadowMap.enabled = true;
+            const renderer = new THREE. WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+            renderer.setSize(window.innerWidth, window. innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowShadowMap;
             container.appendChild(renderer.domElement);
 
-            console.log("Renderer created");
-
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+            // Lighting - Multiple light sources for immersion
+            const ambientLight = new THREE.AmbientLight(0x4488ff, 0.6);
             scene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(20, 30, 20);
-            directionalLight.castShadow = true;
-            scene.add(directionalLight);
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1. 2);
+            mainLight.position. set(0, 50, 30);
+            mainLight.castShadow = true;
+            mainLight.shadow.mapSize.width = 4096;
+            mainLight.shadow.mapSize.height = 4096;
+            mainLight.shadow.camera.left = -100;
+            mainLight.shadow. camera.right = 100;
+            mainLight.shadow.camera. top = 100;
+            mainLight.shadow.camera.bottom = -100;
+            mainLight. shadow.camera.far = 500;
+            scene.add(mainLight);
 
-            console. log("Lights added");
+            // Point lights for dramatic effect
+            const leftLight = new THREE.PointLight(0xff0080, 1.5, 200);
+            leftLight.position. set(-40, 20, 0);
+            leftLight.castShadow = true;
+            scene.add(leftLight);
 
-            // Create Table
-            const tableGeo = new THREE.BoxGeometry(80, 1, 40);
-            const tableMat = new THREE.MeshLambertMaterial({ color: 0x004400 });
-            const table = new THREE.Mesh(tableGeo, tableMat);
-            table.position.y = -2;
+            const rightLight = new THREE.PointLight(0x0080ff, 1.5, 200);
+            rightLight.position.set(40, 20, 0);
+            rightLight.castShadow = true;
+            scene.add(rightLight);
+
+            const topLight = new THREE.PointLight(0x00ff88, 1, 150);
+            topLight.position. set(0, 40, 0);
+            scene.add(topLight);
+
+            // Skybox (surrounding walls)
+            const skyboxGeometry = new THREE.BoxGeometry(400, 300, 300);
+            const skyboxMaterial = new THREE.MeshBasicMaterial({
+                color: 0x1a1a2e,
+                side: THREE.BackSide
+            });
+            const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+            scene.add(skybox);
+
+            // Floor
+            const floorGeo = new THREE.PlaneGeometry(100, 50);
+            const floorMat = new THREE.MeshStandardMaterial({
+                color: 0x001a00,
+                metalness: 0.3,
+                roughness: 0.7
+            });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -10;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Game Table
+            const tableGeo = new THREE.BoxGeometry(100, 1. 5, 50);
+            const tableMat = new THREE.MeshStandardMaterial({
+                color: 0x1a4d2e,
+                metalness: 0.6,
+                roughness: 0.4,
+                emissive: 0x003300,
+                emissiveIntensity: 0.3
+            });
+            const table = new THREE. Mesh(tableGeo, tableMat);
+            table.position.y = 0;
+            table.castShadow = true;
+            table.receiveShadow = true;
             scene.add(table);
 
-            // Create Walls
-            const wallGeo = new THREE.BoxGeometry(80, 1, 2);
-            const wallMat = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+            // Glowing edge markers
+            const edgeMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00ff00,
+                emissive: 0x00ff00,
+                emissiveIntensity: 0.8,
+                metalness: 0.8,
+                roughness: 0.1
+            });
 
-            const wall1 = new THREE.Mesh(wallGeo, wallMat);
-            wall1.position. z = -21;
-            scene.add(wall1);
+            // Top edge
+            const topEdgeGeo = new THREE.BoxGeometry(100, 1, 2);
+            const topEdge = new THREE.Mesh(topEdgeGeo, edgeMaterial);
+            topEdge. position.set(0, 1, -25);
+            topEdge.castShadow = true;
+            scene.add(topEdge);
 
-            const wall2 = new THREE.Mesh(wallGeo, wallMat);
-            wall2.position.z = 21;
-            scene.add(wall2);
+            // Bottom edge
+            const bottomEdge = new THREE. Mesh(topEdgeGeo, edgeMaterial);
+            bottomEdge.position.set(0, 1, 25);
+            bottomEdge.castShadow = true;
+            scene.add(bottomEdge);
 
-            // Create Center Line
-            const lineGeo = new THREE.BoxGeometry(2, 1, 40);
-            const lineMat = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-            const line = new THREE.Mesh(lineGeo, lineMat);
-            scene.add(line);
+            // Center line - dashed effect
+            for (let i = -20; i < 20; i += 3) {
+                const lineSegmentGeo = new THREE.BoxGeometry(2, 1.2, 2);
+                const lineSegment = new THREE.Mesh(lineSegmentGeo, edgeMaterial);
+                lineSegment.position.set(0, 1, i);
+                lineSegment.castShadow = true;
+                scene.add(lineSegment);
+            }
 
-            // Create Paddles
-            const paddleGeo = new THREE.BoxGeometry(2, 1, 10);
-            const padMat1 = new THREE.MeshLambertMaterial({ color: 0xff0080 });
-            const padMat2 = new THREE.MeshLambertMaterial({ color:  0x0080ff });
-
-            const paddleLeft = new THREE.Mesh(paddleGeo, padMat1);
-            paddleLeft.position.x = -38;
+            // Player Paddle (Left)
+            const paddleGeo = new THREE.BoxGeometry(2, 1, 12);
+            const playerPaddleMat = new THREE.MeshStandardMaterial({
+                color: 0xff0080,
+                emissive: 0xff0080,
+                emissiveIntensity: 0.6,
+                metalness: 0.9,
+                roughness: 0.05
+            });
+            const paddleLeft = new THREE.Mesh(paddleGeo, playerPaddleMat);
+            paddleLeft.position.x = -45;
+            paddleLeft.castShadow = true;
+            paddleLeft.receiveShadow = true;
             scene.add(paddleLeft);
 
-            const paddleRight = new THREE.Mesh(paddleGeo, padMat2);
-            paddleRight. position.x = 38;
-            scene.add(paddleRight);
+            // Add visual effect to paddle
+            const paddleOutlineGeo = new THREE.BoxGeometry(2.4, 1.3, 12. 5);
+            const paddleOutlineMat = new THREE.MeshBasicMaterial({
+                color:  0xff0080,
+                wireframe: true,
+                opacity: 0.3
+            });
+            const paddleLeftOutline = new THREE.Mesh(paddleOutlineGeo, paddleOutlineMat);
+            paddleLeftOutline.position.x = -45;
+            scene.add(paddleLeftOutline);
 
-            // Create Ball
-            const ballGeo = new THREE. SphereGeometry(1, 32, 32);
-            const ballMat = new THREE.MeshLambertMaterial({ color:  0xffff00 });
-            const ball = new THREE. Mesh(ballGeo, ballMat);
+            // Computer Paddle (Right)
+            const aiPaddleMat = new THREE.MeshStandardMaterial({
+                color: 0x0080ff,
+                emissive: 0x0080ff,
+                emissiveIntensity: 0.6,
+                metalness: 0.9,
+                roughness: 0.05
+            });
+            const paddleRight = new THREE.Mesh(paddleGeo, aiPaddleMat);
+            paddleRight.position.x = 45;
+            paddleRight. castShadow = true;
+            paddleRight.receiveShadow = true;
+            scene. add(paddleRight);
+
+            // Add visual effect to AI paddle
+            const paddleRightOutline = new THREE. Mesh(paddleOutlineGeo, paddleOutlineMat);
+            paddleRightOutline.position.x = 45;
+            paddleRightOutline.material = new THREE.MeshBasicMaterial({
+                color: 0x0080ff,
+                wireframe:  true,
+                opacity: 0.3
+            });
+            scene.add(paddleRightOutline);
+
+            // Ball with glow effect
+            const ballGeo = new THREE.SphereGeometry(1.2, 64, 64);
+            const ballMat = new THREE.MeshStandardMaterial({
+                color: 0xffff00,
+                emissive: 0xffff00,
+                emissiveIntensity: 1,
+                metalness: 0.8,
+                roughness: 0.05
+            });
+            const ball = new THREE.Mesh(ballGeo, ballMat);
+            ball.castShadow = true;
+            ball.receiveShadow = true;
             scene.add(ball);
 
-            console.log("Game objects created");
+            // Ball glow halo
+            const haloGeo = new THREE.SphereGeometry(1.8, 32, 32);
+            const haloMat = new THREE.MeshBasicMaterial({
+                color:  0xffff00,
+                transparent: true,
+                opacity: 0.2,
+                side: THREE.BackSide
+            });
+            const halo = new THREE.Mesh(haloGeo, haloMat);
+            halo.position.copy(ball.position);
+            scene.add(halo);
 
             // Game State
             const state = {
                 ballX: 0,
                 ballY: 0,
                 ballZ: 0,
-                ballVelX: 0.5,
-                ballVelZ: 0.3,
+                ballVelX: 0.6,
+                ballVelY:  0,
+                ballVelZ: 0.4,
                 paddleLeftZ: 0,
                 paddleRightZ: 0,
                 playerScore: 0,
                 computerScore: 0,
                 gameActive: true,
+                winScore: 5,
                 mouseY: 0,
                 upPressed: false,
-                downPressed: false
+                downPressed: false,
+                ballSpeed: 0
             };
 
-            // Input
+            // Input handling
             document.addEventListener('mousemove', (e) => {
-                state.mouseY = (e.clientY / window.innerHeight) * 40 - 20;
+                state.mouseY = (e.clientY / window.innerHeight) * 50 - 25;
             });
 
             document.addEventListener('keydown', (e) => {
@@ -249,109 +404,140 @@
                 if (e.key === 'ArrowDown') state.downPressed = false;
             });
 
-            // Game Loop
+            // Game Logic
+            function updateGame() {
+                // Update player paddle
+                let targetZ = state.mouseY;
+                if (state.upPressed) targetZ -= 3;
+                if (state.downPressed) targetZ += 3;
+                
+                state.paddleLeftZ += (targetZ - state.paddleLeftZ) * 0.12;
+                state.paddleLeftZ = Math.max(-19, Math.min(19, state.paddleLeftZ));
+                paddleLeft.position.z = state.paddleLeftZ;
+                paddleLeftOutline.position.z = state.paddleLeftZ;
+
+                // Update AI paddle
+                let targetAI = 0;
+                if (state. ballVelX > 0) {
+                    targetAI = state.ballZ;
+                    state.paddleRightZ += (targetAI - state.paddleRightZ) * 0.09;
+                } else {
+                    state.paddleRightZ += (0 - state.paddleRightZ) * 0.05;
+                }
+                state.paddleRightZ = Math.max(-19, Math.min(19, state.paddleRightZ));
+                paddleRight.position.z = state.paddleRightZ;
+                paddleRightOutline.position. z = state.paddleRightZ;
+
+                // Update ball physics
+                state.ballX += state.ballVelX;
+                state.ballZ += state.ballVelZ;
+                state.ballY += state.ballVelY;
+                state.ballVelY -= 0.1; // Gravity
+
+                // Ball bounce on table
+                if (state.ballY < 1. 2) {
+                    state.ballY = 1.2;
+                    state.ballVelY = Math.abs(state.ballVelY) * 0.9;
+                }
+
+                // Side wall collision
+                if (state.ballZ <= -24 || state.ballZ >= 24) {
+                    state. ballVelZ = -state.ballVelZ;
+                    state.ballZ = state.ballZ <= -24 ? -24 :  24;
+                }
+
+                // Left paddle collision
+                if (state.ballVelX < 0 && state.ballX <= -43 && state.ballX >= -47 &&
+                    state.ballZ >= state.paddleLeftZ - 6 &&
+                    state.ballZ <= state.paddleLeftZ + 6) {
+                    state. ballVelX = -state. ballVelX * 1.02;
+                    state.ballX = -43;
+                    state.ballVelZ += (state.paddleLeftZ - state.ballZ) * 0.15;
+                    state.ballVelY += 0.3;
+                }
+
+                // Right paddle collision
+                if (state.ballVelX > 0 && state.ballX >= 43 && state. ballX <= 47 &&
+                    state.ballZ >= state.paddleRightZ - 6 &&
+                    state. ballZ <= state.paddleRightZ + 6) {
+                    state.ballVelX = -state.ballVelX * 1.02;
+                    state.ballX = 43;
+                    state.ballVelZ += (state.paddleRightZ - state.ballZ) * 0.15;
+                    state.ballVelY += 0.3;
+                }
+
+                // Scoring
+                if (state.ballX < -60) {
+                    state.computerScore++;
+                    resetBall();
+                    if (state.computerScore >= state.winScore) {
+                        endGame('🤖 AI WINS!  🤖');
+                    }
+                }
+
+                if (state.ballX > 60) {
+                    state.playerScore++;
+                    resetBall();
+                    if (state.playerScore >= state.winScore) {
+                        endGame('🎉 YOU WIN! 🎉');
+                    }
+                }
+
+                // Speed damping
+                if (Math.abs(state.ballVelZ) > 1.5) {
+                    state. ballVelZ *= 0.97;
+                }
+
+                // Update positions
+                ball.position.set(state.ballX, state. ballY, state.ballZ);
+                halo.position.set(state.ballX, state. ballY, state.ballZ);
+
+                // Calculate ball speed for display
+                state.ballSpeed = Math.sqrt(
+                    state.ballVelX ** 2 + state.ballVelZ ** 2
+                ).toFixed(2);
+
+                // Update UI
+                document.getElementById('playerScore').textContent = state.playerScore;
+                document.getElementById('computerScore').textContent = state. computerScore;
+                document.getElementById('speedIndicator').textContent = 
+                    `⚡ Speed: ${state.ballSpeed}`;
+            }
+
+            function resetBall() {
+                state.ballX = 0;
+                state. ballY = 1.2;
+                state.ballZ = 0;
+                state.ballVelX = (Math.random() > 0.5 ? 1 : -1) * 0.6;
+                state.ballVelY = 0;
+                state.ballVelZ = (Math.random() - 0.5) * 0.6;
+            }
+
+            function endGame(message) {
+                state.gameActive = false;
+                document.getElementById('gameStatus').textContent = 
+                    message + ' | Press F5 to reload';
+            }
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera. aspect = window.innerWidth / window.innerHeight;
+                camera. updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Animation loop
             function animate() {
                 requestAnimationFrame(animate);
 
                 if (state.gameActive) {
-                    // Update left paddle
-                    let targetZ = state.mouseY;
-                    if (state.upPressed) targetZ -= 2;
-                    if (state. downPressed) targetZ += 2;
-                    state.paddleLeftZ += (targetZ - state.paddleLeftZ) * 0.1;
-                    state.paddleLeftZ = Math.max(-15, Math.min(15, state.paddleLeftZ));
-                    paddleLeft.position.z = state.paddleLeftZ;
-
-                    // Update right paddle (AI)
-                    let targetAI = 0;
-                    if (state.ballVelX > 0) {
-                        targetAI = state.ballZ;
-                        state.paddleRightZ += (targetAI - state.paddleRightZ) * 0.08;
-                    } else {
-                        state.paddleRightZ += (0 - state.paddleRightZ) * 0.05;
-                    }
-                    state.paddleRightZ = Math.max(-15, Math. min(15, state.paddleRightZ));
-                    paddleRight.position.z = state.paddleRightZ;
-
-                    // Update ball
-                    state.ballX += state.ballVelX;
-                    state.ballZ += state.ballVelZ;
-
-                    // Wall collision
-                    if (state.ballZ <= -20 || state.ballZ >= 20) {
-                        state. ballVelZ = -state. ballVelZ;
-                        state.ballZ = state.ballZ <= -20 ? -20 : 20;
-                    }
-
-                    // Left paddle collision
-                    if (state.ballVelX < 0 && state.ballX <= -37 && 
-                        state.ballZ >= state.paddleLeftZ - 5 && 
-                        state.ballZ <= state.paddleLeftZ + 5) {
-                        state.ballVelX = -state.ballVelX;
-                        state.ballX = -37;
-                        state.ballVelZ += (state.paddleLeftZ - state.ballZ) * 0.1;
-                        state.ballVelX *= 1.05;
-                    }
-
-                    // Right paddle collision
-                    if (state. ballVelX > 0 && state.ballX >= 37 && 
-                        state. ballZ >= state.paddleRightZ - 5 && 
-                        state.ballZ <= state.paddleRightZ + 5) {
-                        state.ballVelX = -state.ballVelX;
-                        state.ballX = 37;
-                        state.ballVelZ += (state.paddleRightZ - state.ballZ) * 0.1;
-                        state.ballVelX *= 1.05;
-                    }
-
-                    // Scoring
-                    if (state. ballX < -50) {
-                        state. computerScore++;
-                        state.ballX = 0;
-                        state.ballZ = 0;
-                        state.ballVelX = 0.5;
-                        state. ballVelZ = (Math.random() - 0.5) * 0.4;
-                        if (state.computerScore >= 5) {
-                            state. gameActive = false;
-                            document.getElementById('gameStatus').textContent = 'COMPUTER WINS!  🤖 Press F5 to reload';
-                        }
-                    }
-
-                    if (state.ballX > 50) {
-                        state.playerScore++;
-                        state.ballX = 0;
-                        state.ballZ = 0;
-                        state.ballVelX = -0.5;
-                        state.ballVelZ = (Math.random() - 0.5) * 0.4;
-                        if (state.playerScore >= 5) {
-                            state.gameActive = false;
-                            document.getElementById('gameStatus').textContent = 'YOU WIN! 🎉 Press F5 to reload';
-                        }
-                    }
-
-                    // Speed damping
-                    if (Math.abs(state.ballVelZ) > 1) {
-                        state. ballVelZ *= 0.98;
-                    }
-
-                    // Update positions
-                    ball.position.set(state.ballX, state. ballY, state.ballZ);
-
-                    // Update UI
-                    document.getElementById('playerScore').textContent = state.playerScore;
-                    document.getElementById('computerScore').textContent = state.computerScore;
+                    updateGame();
                 }
 
                 renderer.render(scene, camera);
             }
 
-            // Handle resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window. innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            console.log("Starting animation loop");
+            console.log("🎮 Game is running!");
             animate();
         }
     </script>
