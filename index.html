@@ -30,7 +30,7 @@
             z-index: 100;
         }
 
-        .score {
+        . score {
             position: fixed;
             top: 20px;
             font-size: 48px;
@@ -54,7 +54,7 @@
             transform: translateX(-50%);
             color: #00ccff;
             font-size:  14px;
-            text-align:  center;
+            text-align: center;
             text-shadow: 0 0 10px #00ccff;
         }
 
@@ -65,8 +65,8 @@
             transform: translateX(-50%);
             color: #ffff00;
             font-size: 28px;
-            font-weight:  bold;
-            text-shadow:  0 0 10px #ffff00;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffff00;
         }
     </style>
 </head>
@@ -84,7 +84,7 @@
         let scene, camera, renderer, ball, paddleLeft, paddleRight, table;
         let gameState = {
             ballPos: { x: 0, y: 0, z: 0 },
-            ballVel: { x: 0.5, y: 0, z:  0.3 },
+            ballVel: { x: 0.5, y: 0, z: 0.3 },
             paddleLeftZ: 0,
             paddleRightZ: 0,
             playerScore: 0,
@@ -92,7 +92,7 @@
             gameActive: true,
             mouseY: 0,
             upPressed: false,
-            downPressed: false
+            downPressed:  false
         };
 
         // Check if Three.js is loaded
@@ -170,14 +170,14 @@
             // Right Paddle (AI)
             const paddleRightMat = new THREE.MeshLambertMaterial({ color: 0x0080ff });
             paddleRight = new THREE.Mesh(paddleGeo, paddleRightMat);
-            paddleRight. position.x = 38;
+            paddleRight.position.x = 38;
             paddleRight.castShadow = true;
-            scene. add(paddleRight);
+            scene.add(paddleRight);
 
             // Ball
             const ballGeo = new THREE.SphereGeometry(0.8, 32, 32);
-            const ballMat = new THREE.MeshLambertMaterial({ color:  0xffff00 });
-            ball = new THREE. Mesh(ballGeo, ballMat);
+            const ballMat = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+            ball = new THREE.Mesh(ballGeo, ballMat);
             ball.castShadow = true;
             scene.add(ball);
 
@@ -193,8 +193,8 @@
                 if (e.key === 'ArrowDown') gameState.downPressed = true;
             });
 
-            document.addEventListener('keyup', (e) => {
-                if (e.key === 'ArrowUp') gameState.upPressed = false;
+            document. addEventListener('keyup', (e) => {
+                if (e. key === 'ArrowUp') gameState.upPressed = false;
                 if (e.key === 'ArrowDown') gameState.downPressed = false;
             });
 
@@ -224,7 +224,7 @@
                 let targetAI = 0;
                 if (gameState.ballVel.x > 0) {
                     targetAI = gameState.ballPos.z;
-                    gameState.paddleRightZ += (targetAI - gameState.paddleRightZ) * 0.08;
+                    gameState.paddleRightZ += (targetAI - gameState. paddleRightZ) * 0.08;
                 } else {
                     gameState.paddleRightZ += (0 - gameState.paddleRightZ) * 0.05;
                 }
@@ -233,7 +233,7 @@
 
                 // Update ball
                 gameState.ballPos.x += gameState.ballVel.x;
-                gameState.ballPos.z += gameState.ballVel. z;
+                gameState.ballPos. z += gameState.ballVel. z;
 
                 // Collision with top/bottom walls
                 if (gameState.ballPos.z <= -20 || gameState.ballPos.z >= 20) {
@@ -244,51 +244,51 @@
                 // Collision with left paddle
                 if (gameState.ballVel.x < 0 &&
                     gameState.ballPos.x <= -37 &&
-                    gameState. ballPos.z >= gameState.paddleLeftZ - 5 &&
+                    gameState. ballPos.z >= gameState. paddleLeftZ - 5 &&
                     gameState.ballPos.z <= gameState.paddleLeftZ + 5) {
                     gameState.ballVel.x = -gameState.ballVel.x;
                     gameState.ballPos.x = -37;
-                    gameState.ballVel.z += (gameState.paddleLeftZ - gameState.ballPos.z) * 0.15;
+                    gameState. ballVel.z += (gameState.paddleLeftZ - gameState.ballPos.z) * 0.15;
                     gameState.ballVel.x *= 1.05;
                 }
 
                 // Collision with right paddle
                 if (gameState.ballVel.x > 0 &&
                     gameState.ballPos.x >= 37 &&
-                    gameState. ballPos.z >= gameState. paddleRightZ - 5 &&
-                    gameState. ballPos.z <= gameState. paddleRightZ + 5) {
-                    gameState. ballVel.x = -gameState.ballVel.x;
-                    gameState.ballPos.x = 37;
-                    gameState.ballVel. z += (gameState.paddleRightZ - gameState.ballPos.z) * 0.15;
-                    gameState. ballVel.x *= 1.05;
+                    gameState.ballPos.z >= gameState.paddleRightZ - 5 &&
+                    gameState.ballPos.z <= gameState.paddleRightZ + 5) {
+                    gameState.ballVel.x = -gameState.ballVel. x;
+                    gameState. ballPos.x = 37;
+                    gameState.ballVel.z += (gameState. paddleRightZ - gameState.ballPos.z) * 0.15;
+                    gameState.ballVel.x *= 1.05;
                 }
 
                 // Scoring
                 if (gameState.ballPos.x < -50) {
-                    gameState. computerScore++;
+                    gameState.computerScore++;
                     resetBall();
                     if (gameState.computerScore >= 5) {
                         gameState.gameActive = false;
-                        document.getElementById('status').textContent = 'AI WINS!  Press F5 to reload';
+                        document. getElementById('status').textContent = 'AI WINS!  Press F5 to reload';
                     }
                 }
 
-                if (gameState.ballPos.x > 50) {
+                if (gameState.ballPos. x > 50) {
                     gameState.playerScore++;
                     resetBall();
                     if (gameState.playerScore >= 5) {
                         gameState.gameActive = false;
-                        document.getElementById('status').textContent = 'YOU WIN!  Press F5 to reload';
+                        document.getElementById('status').textContent = 'YOU WIN! Press F5 to reload';
                     }
                 }
 
                 // Speed damping
-                if (Math.abs(gameState.ballVel.z) > 1) {
+                if (Math.abs(gameState. ballVel.z) > 1) {
                     gameState.ballVel.z *= 0.98;
                 }
 
                 // Update positions
-                ball.position.set(gameState.ballPos.x, gameState.ballPos.y, gameState.ballPos.z);
+                ball. position.set(gameState.ballPos.x, gameState.ballPos.y, gameState.ballPos.z);
 
                 // Update score display
                 document.getElementById('playerScore').textContent = gameState. playerScore;
@@ -299,7 +299,12 @@
         }
 
         // Initialize when page loads
-        window.addEventListener('load', initThreeJs);
+        window. addEventListener('load', initThreeJs);
+
+        function resetBall() {
+            gameState.ballPos = { x: 0, y:  0, z: 0 };
+            gameState.ballVel = { x: (Math.random() > 0.5 ? 1 : -1) * 0.5, y: 0, z: 0.3 };
+        }
     </script>
 </body>
 </html>
